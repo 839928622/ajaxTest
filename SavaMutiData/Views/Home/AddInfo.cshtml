@@ -26,7 +26,7 @@
                 <td> <input type="date" class="form-control" id="txtMonth" /></td>
                 <td> <input type="text" class="form-control" id="txtFee" /></td>
                 <td> <span class="btn btn-success col-lg-12" id="btnAdd">添加</span></td>
-            </tr>
+            </tr> @*这里是第一行 ，因此后面写 not first*@
         </tbody>
     </table>
 
@@ -43,7 +43,7 @@
             $('table#mytable > tbody').append(
                 '<tr onclick="edit(this)"> <td style="text-align:center;>" ' +
                 i + ' </td><td>' + $('#txtMonth').val() + '</td><td>' +
-                $('#txtFee').val()+'</td><td><span class="btn btn-danger col-md-12" onclick="remove(this)"></span></td></tr>'
+                $('#txtFee').val()+'</td><td><span class="btn btn-danger col-md-12 fa fa-trash" onclick="remove(this)">删除</span></td></tr>'
                 
                 
                 
@@ -89,7 +89,7 @@
             DtlArr.push(tbl); // 把对象放到数组
         });
 
-        $('#hdnData').val(JSON.stringify(DtlArr)); // 给隐藏域赋值
+       // $('#hdnData').val(JSON.stringify(DtlArr)); // 给隐藏域赋值
     
     }
 
@@ -98,12 +98,13 @@
         function () {
             var dataid = $('#dataId').val();
 
-            var xx = { Month: "2019-05-01", Money: "23" };
-            var zz = { Month: "2019-05-02",Money:"555555555"};
-            DtlArr.push(xx);
-            DtlArr.push(zz);
-            var data = $('#hdnData').val();
+          //  var xx = { Month: "2019-05-01", Money: "23" };
+          //  var zz = { Month: "2019-05-02",Money:"555555555"};
+          //  DtlArr.push(xx);
+           // DtlArr.push(zz);
+           //var data = $('#hdnData').val();
 
+            AddInfo(); // 调用AddInfo 让其把数据push到数组
 
             var yy = JSON.stringify(DtlArr); 
 
