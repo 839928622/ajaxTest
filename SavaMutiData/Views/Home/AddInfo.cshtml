@@ -1,0 +1,127 @@
+﻿@model SavaMutiData.ViewModels.Fee
+@{
+    ViewBag.Title = "AddInfo";
+}
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<h2>AddInfo</h2>
+@*@using (Html.BeginForm("AddInfo","Home",FormMethod.Post,new { onsubmit="AddInfo()"}))*@
+
+
+<div class="row">
+    <input type="hidden" id="hdnData"  />
+    <input type="hidden" name="name" id="dataId" value="123" />
+    <button class="btn btn-success" id="button-save"> 保存</button>
+    <table class="table table-condensed table-hover table-striped" id="mytable">
+        <thead>
+            <tr>
+                <th>条数</th>
+                <th>日期</th>
+                <th>费用</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="txtSno">条数</td>
+                <td> <input type="date" class="form-control" id="txtMonth" /></td>
+                <td> <input type="text" class="form-control" id="txtFee" /></td>
+                <td> <span class="btn btn-success col-lg-12" id="btnAdd">添加</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script type="text/javascript">
+    var i = 1;
+    var DtlArr = []; //全局数组
+    $('#btnAdd').click(function () {
+        if ($updaterow != null) {
+            UpdateRow();
+
+        } else {
+            $('table#mytable > tbody').append(
+                '<tr onclick="edit(this)"> <td style="text-align:center;>" ' +
+                i + ' </td><td>' + $('#txtMonth').val() + '</td><td>' +
+                $('#txtFee').val()+'</td><td><span class="btn btn-danger col-md-12" onclick="remove(this)"></span></td></tr>'
+                
+                
+                
+
+                );
+        }
+        i++
+    });
+
+    //'<tr onclick="edit(this)"><td style="text-align:center;"> ' +
+    //    i + '</td><td> ' + $('#txtMonth').val() + '</td><td>' + $('#txtFee').val() + '</td><td><span class="btn btn-danger col-md-12" onclick="remove(this)"></span></td></tr>'
+    function remove(e) {
+        $(e).closest('tr').remove();
+
+    }
+
+    var $updaterow = null
+
+    function edit(Row) {
+        $tr = $(Row).closest('tr');
+        $('#txtMonth').val($($tr).find('td:eq(1)').html());
+        $('#txtFee').val($($tr).find('td:eq(2)').html());
+
+        $updaterow = $tr;
+    };
+
+    function UpdateRow() {
+        $($updaterow).find('td:eq(1)').html($('#txtMonth').val());
+        $($updaterow).find('td:eq(2)').html($('#txtFee').val());
+
+        $updaterow = null;
+
+
+    }
+
+    function AddInfo() {
+        
+        $('#mytable >tbody tr').not(':first').each(function (index, elem) {
+            var tbl = {};//对象
+            tbl.Month = $($(this).find('td:eq(1)')).html();
+            tbl.Money = $($(this).find('td:eq(2)')).html();
+            alert(tbl.Month.toString());
+            DtlArr.push(tbl); // 把对象放到数组
+        });
+
+        $('#hdnData').val(JSON.stringify(DtlArr)); // 给隐藏域赋值
+    
+    }
+
+
+    $('#button-save').on("click",
+        function () {
+            var dataid = $('#dataId').val();
+
+            var xx = { Month: "2019-05-01", Money: "23" };
+            var zz = { Month: "2019-05-02",Money:"555555555"};
+            DtlArr.push(xx);
+            DtlArr.push(zz);
+            var data = $('#hdnData').val();
+
+
+            var yy = JSON.stringify(DtlArr); 
+
+            $.ajax({
+                method: 'post',
+             
+                url: '/Home/AddInfo',
+                traditional: true,
+            
+                //contentType: "application/json",
+                data: { MainId: dataid, dataJson: yy },
+                success: function () {
+                    console.log("数据上传成功");
+                },
+                error: function () {
+                    console.log("数据上传失败");
+                }
+            });
+      
+        });
+</script>
